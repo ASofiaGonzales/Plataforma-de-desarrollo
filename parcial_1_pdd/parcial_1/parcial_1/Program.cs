@@ -26,90 +26,92 @@ namespace parcial_1
              CrearRecurso("Martillo", 4);
              ListaRecursos();*/
 
-        }
-        //Métodos usuario
-        public static void ListaUsuario()
-        {
-            var bd = new TareasDbContext();
-            var lista = bd.Usuarios.ToList();
-            foreach (var item in lista)
+
+            //Métodos usuario
+            static void ListaUsuario()
             {
-                Console.WriteLine($"Usuario: {item.Usuario} ({item.IdUsuario})");
+                var bd = new TareasDbContext();
+                var lista = bd.Usuarios.ToList();
+                foreach (var item in lista)
+                {
+                    Console.WriteLine($"Usuario: {item.Usuario} ({item.IdUsuario})");
+                }
+
+            }
+            static void CrearUsuario(string usuario, string contraseña)
+            {
+
+                var bd = new TareasDbContext();
+
+                bd.Set<Usuarios>().Add(new Usuarios
+                {
+                    Usuario = usuario,
+                    Clave = contraseña,
+
+                });
+
+                bd.SaveChanges();
+            }
+            static void EliminarUsuario(int idUsuario)
+            {
+                var bd = new TareasDbContext();
+                var usuario = bd.Usuarios.Where(i => i.IdUsuario == idUsuario).Single();
+                bd.Usuarios.Remove(usuario);
+                bd.SaveChanges();
             }
 
-        }
-        public static void CrearUsuario(string usuario, string contraseña)
-        {
-
-            var bd = new TareasDbContext();
-
-            bd.Set<Usuarios>().Add(new Usuarios
+            //Metodo Recurso
+            static void CrearRecurso(string nombre, int idUsuario)
             {
-                Usuario = usuario,
-                Clave = contraseña,
+                var bd = new TareasDbContext();
+                bd.Recursos.Add(new Recursos
+                {
+                    Nombre = nombre,
+                    IdUsuario = idUsuario,
 
-            });
+                });
 
-            bd.SaveChanges();
-        }
-        public static void EliminarUsuario(int idUsuario)
-        {
-            var bd = new TareasDbContext();
-            var usuario = bd.Usuarios.Where(i => i.IdUsuario == idUsuario).Single();
-            bd.Usuarios.Remove(usuario);
-            bd.SaveChanges();
-        }
-
-        //Metodo Recurso
-        public static void CrearRecurso(string nombre, int idUsuario)
-        {
-            var bd = new TareasDbContext();
-            bd.Recursos.Add(new Recursos
-            {
-                Nombre = nombre,
-                IdUsuario = idUsuario,
-
-            });
-
-            bd.SaveChanges();
-            ;
-        }
-        public static void ListaRecursos()
-        {
-            var bd = new TareasDbContext();
-            var lista = bd.Recursos.ToList();
-            foreach (var item in lista)
-            {
-                Console.WriteLine($"Nombre: {item.Nombre} ({item.IdRecursos}) Usuario: {item.IdUsuario}");
+                bd.SaveChanges();
+                ;
             }
-        }
-
-        //Metodo Tarea
-        public static void CrearDetalle(DateTime fecha, int tiempo, int idrecurso, int idtarea)
-        {
-            var bd = new TareasDbContext();
-            bd.Detalles.Add(new Detalles
+            static void ListaRecursos()
             {
+                var bd = new TareasDbContext();
+                var lista = bd.Recursos.ToList();
+                foreach (var item in lista)
+                {
+                    Console.WriteLine($"Nombre: {item.Nombre} ({item.IdRecursos}) Usuario: {item.IdUsuario}");
+                }
+            }
 
-                Fecha = fecha,
-                Tiempo = tiempo,
-                IdRecursos = idrecurso,
-                IdTareas = idtarea,
+            //Metodo Tarea
+            static void CrearDetalle(DateTime fecha, int tiempo, int idrecurso, int idtarea)
+            {
+                var bd = new TareasDbContext();
+                bd.Detalles.Add(new Detalles
+                {
 
-            });
+                    Fecha = fecha,
+                    Tiempo = tiempo,
+                    IdRecursos = idrecurso,
+                    IdTareas = idtarea,
 
-            bd.SaveChanges();           
-        }
-         public static void CambiarDetalle(int id, int nuevoTiempo)
+                });
+
+                bd.SaveChanges();
+            }
+            static void CambiarDetalle(int id, int nuevoTiempo)
             {
                 var bd = new TareasDbContext();
                 var detalle = bd.Detalles.Where(a => a.IdDetalles == id).FirstOrDefault();
 
                 if (detalle != null)
-                { detalle.Tiempo = nuevoTiempo; 
+                {
+                    detalle.Tiempo = nuevoTiempo;
                 };
 
                 bd.SaveChanges();
             }
         }
+    }
 }
