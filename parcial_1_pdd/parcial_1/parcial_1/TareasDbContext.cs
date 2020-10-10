@@ -64,8 +64,7 @@ namespace parcial_1
                 .Property(p => p.Usuario)
                 .HasColumnType("varchar(30)")
                 .IsRequired()
-                .HasColumnName("Usuarios")
-                ;
+                .HasColumnName("Usuarios");
 
             //Detalles
             modelBuilder.Entity<Detalles>()
@@ -85,14 +84,13 @@ namespace parcial_1
                     .HasColumnType("DateTime")
                     .IsRequired()
                     .HasColumnName("Fecha");
-            ;
+
             modelBuilder.Entity<Detalles>()
                    .ToTable("Detalles")
                    .Property(p => p.Tiempo)
                    .HasColumnType("int")
                    .IsRequired()
                    .HasColumnName("Tiempo");
-            ;
             
             //Tareas
             modelBuilder.Entity<Tareas>()
@@ -112,7 +110,6 @@ namespace parcial_1
                    .HasColumnType("varchar(100)")
                    .IsRequired()
                    .HasColumnName("Titulo");
-            ;
 
             modelBuilder.Entity<Tareas>()
                     .ToTable("Tareas")
@@ -120,15 +117,13 @@ namespace parcial_1
                     .HasColumnType("DateTime")
                     .IsRequired()
                     .HasColumnName("Vencimiento");
-            ;
+
             modelBuilder.Entity<Tareas>()
                     .ToTable("Tareas")
                     .Property(p => p.Estimacion)
                     .HasColumnType("int")
                     .IsRequired()
                     .HasColumnName("Estimacion");
-
-            ;
             
             modelBuilder.Entity<Tareas>()
                     .ToTable("Tareas")
