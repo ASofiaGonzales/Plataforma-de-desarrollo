@@ -1,0 +1,86 @@
+﻿@page "/EditarTarea/{id:int}"
+@using BlazorApp1.Data
+@inject TareasService service
+@inject NavigationManager navigation
+
+<EditForm Model="@Modelo" OnValidSubmit="@Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group row mb-2">
+
+        <label class="bg-light m-2">
+            Titulo
+            <InputText @bind-Value="Modelo.Titulo" />
+        </label>
+
+        <label>
+            Vencimiento
+            <InputDate @bind-Value="Modelo.Vencimiento" />
+        </label>
+
+    </div>
+    <div class="form-group row">
+        <label class="bg-light m-2">
+            Responsable
+
+            <InputSelect @bind-Value="RecID">
+                <option value="0">Elija un recurso</option>
+                @foreach (var item in rec)
+                {
+                    <option value="@item.IDRecurso">@item.Nombre</option>
+                }
+            </InputSelect>
+        </label>
+        <label class="bg-light m-2">
+            Estimación
+            <InputNumber @bind-Value=Modelo.Estimacion />
+        </label>
+
+        <label class="bg-light m-2">
+            Activa:
+            <InputCheckbox @bind-Value="Modelo.Estado" />
+        </label>
+
+    </div>
+
+
+    <button type="submit">Guardar</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private List<Recursos> rec;
+
+    public Tareas Modelo { get; set; } = new Tareas();
+    public string RecID { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id > 0)
+        {
+            Modelo = await service.Get(Id);
+            RecID = Modelo.IdRecursos.ToString();
+
+        }
+        else
+        {
+            Modelo = new Tareas();
+        }
+        rec = await service.GetAllRecursos();
+    }
+
+
+    private async void Guardar()
+    {
+
+        Modelo.IdRecursos = int.Parse(RecID);
+        await service.Save(Modelo);
+        navigation.NavigateTo("ListadoTareas");
+    }
+
+
+}
